@@ -8,12 +8,12 @@
 <meta name="keywords" content="">
 <link href="" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="js/index.js"></script>     
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
-	<link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> 
-	<script src="js/bootstrap.min.js"></script> 
-	<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
-	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+<script src="js/index.js"></script>      
+<link href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> 
+<script src="js/bootstrap.min.js"></script>  
+<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+<script src="js/bootstrap-table-zh-CN.min.js"></script> 
 </head>
 <body>
     <div class="container">
@@ -21,18 +21,23 @@
 		<div class="col-md-12 column">
 			<div class="page-header">
 				<h1>
-					请扫码<small>微信</small>
+					一起来捉妖<small>扫码平台</small>
 				</h1>
 			</div>
-			
+			<select id="statusSelect" style="width: 120px"  class="selectpicker show-tick form-control" data-live-search="false" >
+					<option value="">状态</option>
+					<option value="0" selected="selected">未扫码</option>
+					<option value="1">扫码成功</option>
+					<option value="-1">扫码失败</option>
+				</select> 
 			<table id="tb_" data-pagination="true" data-show-refresh="true" data-show-toggle="true" data-showColumns="true" data-response-handler="responseHandler">
 			</table>
 
-			<div class="alert alert-success alert-dismissable"> 
+			<!-- <div class="alert alert-success alert-dismissable"> 
 				<h4>
 					注意!
 				</h4> <strong>注意事项</strong> 注意点<a href="#" class="alert-link">alert link</a>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>

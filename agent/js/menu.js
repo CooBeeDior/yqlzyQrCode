@@ -10,7 +10,11 @@
 
  	//1.初始化Table
     var oTable = new TableInit();
-    oTable.Init();
+    oTable.Init(); 
+
+    $("#statusSelect").change(function () { 
+         $("button[name='refresh']").trigger("click"); 
+    });
 
  });
 
@@ -234,32 +238,14 @@ var TableInit = function () {
                 title: '修改人' ,
                  class: 'W120',
             }  
-            ],
-         // 　　onEditableSave: function (field, row, oldValue, $el) {
-         //     $.ajax({
-         //         type: "post",
-         //         url: "http://47.111.87.132:8066//api/QrCode/UpdateQrCodeStatus",
-         //         data: { strJson: JSON.stringify(row.id) },
-         //         success: function (data, status) {
-         //             if (status == "success") {
-         //                 alert("编辑成功");
-         //             }
-         //         },
-         //         error: function () {
-         //             alert("Error");
-         //         },
-         //         complete: function () {
-
-         //         } 
-         //     });
-         // }
+            ], 
         });
     }; 
 
    //得到查询的参数
   oTableInit.queryParams = function (params) {
         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的 
-            status:0,
+            status: $('#statusSelect').val(),
             pageSize: params.pageSize,
             pageIndex: params.pageNumber 
         };
@@ -267,4 +253,4 @@ var TableInit = function () {
     };
     return oTableInit;
 };
-/** bootstrapTable动态表格赋值 e **/
+/** bootstrapTable动态表格赋值 e **/ 

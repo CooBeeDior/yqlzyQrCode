@@ -13,6 +13,11 @@ $(function(){
 
     setInterval(refreshData,10000);
     refreshData();
+
+     $("#statusSelect").change(function () { 
+         $("button[name='refresh']").trigger("click"); 
+    });
+
  });
 
 /*状态 0:未扫码  1:扫码成功  -1:扫码失败*/
@@ -105,7 +110,7 @@ var TableInit = function () {
    //得到查询的参数
   oTableInit.queryParams = function (params) {
         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的 
-            status:0,
+            status:$('#statusSelect').val(),
             pageSize: params.pageSize,
             pageIndex: params.pageNumber 
         };
