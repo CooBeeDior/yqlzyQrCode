@@ -1,0 +1,33 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2019-07-20 16:06:52
+ * @version $Id$
+ */
+ .tablediv{ white-space: nowrap; overflow: hidden; overflow-x: scroll; -webkit-backface-visibility: hidden; -webkit-overflow-scrolling: touch;} 
+ .W60 .th-inner {
+ 	width:60px !important;
+ }
+ .W70 .th-inner {
+ 	width:70px !important;
+ }
+ .W80 .th-inner {
+ 	width:80px !important;
+ }
+  .W90 .th-inner {
+ 	width:90px !important;
+ }
+ .W100 .th-inner {
+ 	width:100px !important;
+ }
+  .W120 .th-inner {
+ 	width:120px !important;
+ }
+ .W160 .th-inner {
+ 	width:160px !important;
+ }
+
+ .W300 .th-inner {
+ 	width:300px !important;
+ }
