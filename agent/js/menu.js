@@ -142,6 +142,9 @@ function subAddForm() {
     });
 }
 /** 内容方式新增二维码 e **/
+function imgBig(e) {
+    alert();
+}
 
 
 /** bootstrapTable动态表格赋值 s **/
@@ -199,7 +202,7 @@ var TableInit = function () {
                         return '<img style="width:100px" src="images/erweima_bad.png">';
                     }else if(-1 == row.status) { //扫失败的
                         return "扫码失败";
-                    }else if(0 == row.status){ //可以扫的 
+                    }else if(0 == row.status){ //可以扫的 onmousemove="imgBig('+this+')"
                         return '<img style="width:100px" src="http://47.111.87.132:8066/' + row.path + '">';
                     }  
                 } 
