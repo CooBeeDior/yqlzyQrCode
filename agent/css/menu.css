@@ -6,6 +6,10 @@
  * @version $Id$
  */
  .tablediv{ white-space: nowrap; overflow: hidden; overflow-x: scroll; -webkit-backface-visibility: hidden; -webkit-overflow-scrolling: touch;} 
+ .inputTextarea{
+ 	width: 100%;
+ 	height: 400px;
+ }
  .W60 .th-inner {
  	width:60px !important;
  }

@@ -16,7 +16,14 @@
          $("button[name='refresh']").trigger("click"); 
     });
 
+    setInterval(refreshData,10000);
+    refreshData();
  });
+
+ /**定时刷新 **/
+function refreshData() {
+    $("button[name='refresh']").trigger("click"); 
+}
 
 /*状态 0:未扫码  1:扫码成功  -1:扫码失败*/
 function getStatus(sta) {
@@ -73,8 +80,7 @@ function btnAddImg() {
 /** 图片形式新增二维码 s **/
 function uploadTrainProduct(){ 
     let fileList = [];
-    const fileCatcher = $('#addbyimg');  
-    const files = $("#files");
+    const fileCatcher = $('#addbyimg');   
 	let formData = new FormData(fileCatcher[0]);  
     $.ajax({
         url : "http://47.111.87.132:8066/api/qrcode/uploadqrcodeform",
@@ -88,7 +94,7 @@ function uploadTrainProduct(){
             	alert('添加成功');
             	$('#myModal').modal('hide');
             }else{
-            	alert("添加失败，提示："+data.message);
+            	alert("添加失败，请确认是否为可识别的二维码图片");
             }
         }
     });
@@ -96,18 +102,20 @@ function uploadTrainProduct(){
 /** 图片形式新增二维码 e **/
 
 function btnAddCon() {
-	$("input[name='qrCodes']").val('');
+	$("#inputTextarea").val('');
 }
 
 /** 内容方式新增二维码 s **/
-function subAddForm() { 
+function subAddForm() {
+
 	var numArr = [];
-	var txt = $('#addbycon').find(':text');  
-    for (var i = 0; i < txt.length; i++) {
-    	if($.trim(txt.eq(i).val()).length > 0){ 
-        	numArr.push(txt.eq(i).val());  
+    var content = $("#inputTextarea").val().split("\n"); 
+    $.each(content, function(i, val){
+       if($.trim(val).length > 0){ 
+         numArr.push($.trim(val));   
         }
-    }
+    }); 
+
     if(numArr.length < 1) {
     	alert("请添加内容");
     	return;
@@ -156,13 +164,13 @@ var TableInit = function () {
             pageNumber:1,                       //初始化加载第一页，默认第一页
             pageSize: 10,                       //每页的记录行数（*）
             pageList: [10,20],        //可供选择的每页的行数（*）
-            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
             showColumns: true,                  //是否显示所有的列
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
-            height: 700,                     //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            //height: 700,                     //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
@@ -174,70 +182,78 @@ var TableInit = function () {
                     "rows": res.data   //数据 
                  }; 
                 },
-            columns: [{
-                checkbox: true
-            }, {
-                field: 'id',
-                title: 'id',
-                class: 'W200',
-            }, {
+            columns: [
+            // {
+            //     checkbox: false
+            // }, 
+            // {
+            //     field: 'id',
+            //     title: 'id',
+            //     class: 'W200',
+            // }, 
+            {
                 field: 'path',
                 title: '二维码', 
              	formatter:function(value,row,index){ 
-                	let imghtm = '<img style="width:30px" src="http://47.111.87.132:8066/' + row.path + '">';
-                	return imghtm; 
-                }  
+                    if (row.status == 1) { //已经扫过
+                        return '<img style="width:100px" src="images/erweima_bad.png">';
+                    }else if(-1 == row.status) { //扫失败的
+                        return "扫码失败";
+                    }else if(0 == row.status){ //可以扫的 
+                        return '<img style="width:100px" src="http://47.111.87.132:8066/' + row.path + '">';
+                    }  
+                } 
             }, {
                 field: 'status',
                 title: '状态',
                  class: 'W60',
                 formatter:function(value,row,index){ 
-                	var value="";
-                	if(0 == row.status) {
-                		return "未扫码";
-                	}else if(1 == row.status) {
-                		return "扫码成功";
-                	}else if(-1 == row.status) {
-                		return "扫码失败";
-                	}else{
-                		return "状态异常："+row.status;
-                	} 
-                	return value; 
-                }  
+                    var value="";
+                    if(0 == row.status) {
+                        return "<span style='color:green'>未扫码</span>";
+                    }else if(1 == row.status) {
+                        return "扫码成功";
+                    }else if(-1 == row.status) {
+                        return "<span style='color:red'>扫码失败</span>";
+                    }else{
+                        return "<span style='color:red'>状态异常："+row.status + "</span>";
+                    } 
+                    return value; 
+                }   
             }, {
                 field: 'content',
                 title: '内容',
                  class: 'W300',
               
-            }, {
-                field: 'version',
-                title: '版本',
-                 class: 'W80',
+            }
+            //, {
+            //     field: 'version',
+            //     title: '版本',
+            //      class: 'W80',
                 
-            }
-            , {
-                field: 'addTime',
-                title: '添加时间',
-                 class: 'W80',
+            // }
+            // , {
+            //     field: 'addTime',
+            //     title: '添加时间',
+            //     class: 'W80' 
+            // }
+            // , {
+            //     field: 'addUserRealName',
+            //     title: '添加人',
+            //      class: 'W120',
                
-            }
-            , {
-                field: 'addUserRealName',
-                title: '添加人',
-                 class: 'W120',
+            // }
+            // , {
+            //     field: 'updateTime',
+            //     title: '修改时间',
+            //      class: 'W160',
                
-            }
-            , {
-                field: 'updateTime',
-                title: '修改时间',
-                 class: 'W160',
-               
-            }
-            , {
-                field: 'updateUserRealName',
-                title: '修改人' ,
-                 class: 'W120',
-            }  
+            // }
+            // , {
+            //     field: 'updateUserRealName',
+            //     title: '修改人' ,
+            //      class: 'W120',
+            // }  
             ], 
         });
     }; 
