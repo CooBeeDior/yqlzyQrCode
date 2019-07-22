@@ -6,9 +6,10 @@
  */
 
  $(function(){   
- 	
+
+ 	//非admin用户不显示用户管理按钮
     if("admin" != $.cookie('userName')){
-        window.location.href = "login.html";
+        $("#userAdmBtn").hide();
     }
 
  	//1.初始化Table

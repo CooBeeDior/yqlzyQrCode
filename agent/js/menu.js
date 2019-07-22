@@ -6,7 +6,11 @@
  */ 
 
  $(function(){  
- 	//list();
+    
+ 	//非admin用户不显示用户管理按钮
+    if("admin" != $.cookie('userName')){
+        $("#userAdmBtn").hide();
+    }
 
  	//1.初始化Table
     var oTable = new TableInit();
