@@ -18,6 +18,8 @@
 
     setInterval(refreshData,10000);
     refreshData();
+
+    $("#userNameSpan").text("欢迎："+$.cookie('userName'));  
  });
 
  /**定时刷新 **/
@@ -38,49 +40,10 @@ function getStatus(sta) {
 	}
 };
 
-/** 传统html显示 s **/
- function list() {
- 	$.ajax({ 
- 		type : 'post', 
- 		url  : 'http://47.111.87.132:8066/api/qrcode/getqrcodelist', 
- 		contentType: "application/json",
- 		data : JSON.stringify({  
- 				status:0,
- 				pageIndex: 1,
- 				pageSize: 10 
- 		}), 
- 		success : function(res){
- 			$("#dataeara").html(""); 
- 			var data = res.data;  
- 			$.each(data, function (i, item) {
- 				var tr = "<tr>";
- 				tr += "<td><input class='checkboxes' type=\"checkbox\" name=\"checkbox\" ></td>";
- 				tr += "<td>" + (i+1) + "</td>";
- 				tr += "<td>" + "<img style='width:30px' src='http://47.111.87.132:8066/" + item.path + "'>" + "</td>";
- 				tr += "<td>" + item.id + "</td>";   
- 				tr += "<td>" + getStatus(item.status) + "</td>";   
- 				tr += "<td>" + item.content + "</td>";
- 				tr += "<td>" + item.version + "</td>";
- 				tr += "<td>" + item.addTime + "</td>";
- 				tr += "<td>" + item.addUserRealName + "</td>";
- 				tr += "<td>" + item.updateTime + "</td>";
- 				tr += "<td>" + item.updateUserRealName + "</td>"; 
- 				tr += "</tr>"; 
- 				$("#dataeara").append(tr);
- 			});
- 		}         
- 	})
- }
- /** 传统html显示 e **/
-
-function btnAddImg() { 
-	$("input[name='files']").val('');
-}
-
 /** 图片形式新增二维码 s **/
-function uploadTrainProduct(){ 
+function uploadTrainProduct(){   
     let fileList = [];
-    const fileCatcher = $('#addbyimg');   
+    const fileCatcher = $('#addbyimg');    
 	let formData = new FormData(fileCatcher[0]);  
     $.ajax({
         url : "http://47.111.87.132:8066/api/qrcode/uploadqrcodeform",
@@ -88,11 +51,17 @@ function uploadTrainProduct(){
         data : formData, 
         processData : false,                  
         contentType : false,
+        headers: {
+            Authorization: $.cookie('token')
+        },
         async : false,
         success : function(data) { 
             if(true == data.success){
             	alert('添加成功');
             	$('#myModal').modal('hide');
+            }else if(401 == result.code){
+                alert("当前未登录，请登录");
+                window.location.href = "login.html";
             }else{
             	alert("添加失败，请确认是否为可识别的二维码图片");
             }
@@ -101,8 +70,14 @@ function uploadTrainProduct(){
 }
 /** 图片形式新增二维码 e **/
 
+//清空
 function btnAddCon() {
 	$("#inputTextarea").val('');
+}
+
+//清空
+function btnAddImg() { 
+    $("input[name='files']").val('');
 }
 
 /** 内容方式新增二维码 s **/
@@ -124,6 +99,9 @@ function subAddForm() {
         type: "POST",
         dataType:'json',
         contentType: "application/json",
+        headers: {
+            Authorization: $.cookie('token')
+        },
         url: 'http://47.111.87.132:8066/api/qrcode/uploadqrcode', 
         data : JSON.stringify({  
 			  qrCodes: numArr
@@ -132,20 +110,19 @@ function subAddForm() {
         	if(true == result.success){
         		$('#addModal').modal('hide');
         		alert(result.message);
-        	}else{
+        	}else if(401 == result.code){
+                alert("当前未登录，请登录");
+                window.location.href = "login.html";
+            }else{
         		alert("添加失败，提示："+data.message);
         	}
         },
         error: function(data) {
-            alert("error:"+data.responseText);
+            alert("服务器错误");
          } 
     });
 }
-/** 内容方式新增二维码 e **/
-function imgBig(e) {
-    alert();
-}
-
+/** 内容方式新增二维码 e **/ 
 
 /** bootstrapTable动态表格赋值 s **/
 var TableInit = function () {
@@ -161,6 +138,9 @@ var TableInit = function () {
             pagination: true,                   //是否显示分页（*）
             sortable: false,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
+             ajaxOptions:{
+                headers:{"Authorization":$.cookie('token')}
+            },                
             queryParamsType: "",
             queryParams: oTableInit.queryParams,//传递参数（*） 
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
@@ -179,6 +159,10 @@ var TableInit = function () {
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表onEditableSave
             responseHandler: function (res) { 
+                if(401 == res.code){
+                    alert("当前未登录，请登录");
+                    window.location.href = "login.html";
+                }
                  var totalCount = res.totalCount; 
                  return {
                     "total": res.totalCount,//总页数
@@ -273,3 +257,31 @@ var TableInit = function () {
     return oTableInit;
 };
 /** bootstrapTable动态表格赋值 e **/ 
+
+
+//退出
+function loginOut() { 
+     $.ajax({
+        type: "POST",
+        dataType:'json',
+        contentType: "application/json",
+        headers: {
+            Authorization: $.cookie('token')
+        },
+        url: 'http://47.111.87.132:8066/api/User/Logout', 
+        data : "",
+        success: function (result) { 
+            if(true == result.success){
+                $.cookie('token', null, { expires: 7, path: '/' }); //清空本地token
+                $.cookie('userName', null, { expires: 7, path: '/' }); //清空本地token
+                alert("退出成功");
+                window.location.href = "login.html";
+            }else{
+                alert("失败，提示："+result.message);
+            }
+        },
+        error: function(data) {
+            alert("服务器错误");
+         } 
+    });
+}

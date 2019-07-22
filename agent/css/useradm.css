@@ -1,0 +1,8 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2019-07-22 18:52:45
+ * @version $Id$
+ */
+.input-group-addon:first-child{width: 100px} 
