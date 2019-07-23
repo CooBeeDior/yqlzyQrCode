@@ -6,6 +6,7 @@
  */ 
 
  $(function(){  
+
     
  	//非admin用户不显示用户管理按钮
     if("admin" != $.cookie('userName')){
@@ -23,7 +24,7 @@
     setInterval(refreshData,10000);
     refreshData();
 
-    $("#userNameSpan").text("欢迎："+$.cookie('userName'));  
+    $("#userNameSpan").text("欢迎："+$.cookie('userName'));   
  });
 
  /**定时刷新 **/
@@ -59,11 +60,11 @@ function uploadTrainProduct(){
             Authorization: $.cookie('token')
         },
         async : false,
-        success : function(data) { 
-            if(true == data.success){
+        success : function(result) { 
+            if(true == result.success){
             	alert('添加成功');
             	$('#myModal').modal('hide');
-            }else if(401 == data.code){
+            }else if(401 == result.code){
                 alert("当前未登录，请登录");
                 window.location.href = "index.html";
             }else{
@@ -118,7 +119,7 @@ function subAddForm() {
                 alert("当前未登录，请登录");
                 window.location.href = "index.html";
             }else{
-        		alert("添加失败，提示："+data.message);
+        		alert("添加失败，提示："+result.message);
         	}
         },
         error: function(data) {
@@ -174,6 +175,13 @@ var TableInit = function () {
                  }; 
                 },
             columns: [
+                     {
+                        //field: 'Number',//可不加
+                        title: '序号', 
+                        formatter: function (value, row, index) {
+                            return index+1;
+                        }
+                    }, 
             // {
             //     checkbox: false
             // }, 
@@ -191,9 +199,15 @@ var TableInit = function () {
                     }else if(-1 == row.status) { //扫失败的
                         return "扫码失败";
                     }else if(0 == row.status){ //可以扫的 onmousemove="imgBig('+this+')"
-                        return '<img style="width:100px" src="http://47.111.87.132:8066/' + row.path + '">';
+                        return '<img style="width:100px" class="qrCodesImg" src="http://47.111.87.132:8066/' + row.path + '">';
                     }  
-                } 
+                }, 
+                events: {
+                    'click .qrCodesImg': function(e, value, row, index) { 
+                        $("#showImage").attr('src','http://47.111.87.132:8066/' + row.path); 
+                        $('#showImgModal').modal('show'); 
+                    }, 
+                }
             }, {
                 field: 'status',
                 title: '状态',

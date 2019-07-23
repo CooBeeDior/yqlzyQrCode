@@ -66,6 +66,13 @@ var TableInit = function () {
                  }; 
                 },
             columns: [
+                    {
+                        //field: 'Number',//可不加
+                        title: '序号', 
+                        formatter: function (value, row, index) {
+                            return index+1;
+                        }
+                    },
             // {
             //     checkbox: false
             // }, 
@@ -158,7 +165,7 @@ function subAddForm() {
                 alert("当前未登录，请登录");
                 window.location.href = "index.html";
             }else{
-        		alert("添加失败，提示："+data.message);
+        		alert("添加失败，提示："+result.message);
         	}
         },
         error: function(data) {

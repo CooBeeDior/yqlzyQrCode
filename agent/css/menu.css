@@ -7,9 +7,9 @@
  */
  .tablediv{ white-space: nowrap; overflow: hidden; overflow-x: scroll; -webkit-backface-visibility: hidden; -webkit-overflow-scrolling: touch;} 
  
-/*.table-hover>tbody>tr:hover {
-    background-color: wheat!important;
-}*/
+img{cursor: pointer;}
+#pic{position: absolute; display: none;}
+#pic1{ width: 400px; height: 300px; border-radius: 5px; -webkit-box-shadow: 5px 5px 5px 5px hsla(0,0%,5%,1.00); box-shadow: 5px 5px 5px 0px hsla(0,0%,5%,0.3); } 
 
  .inputTextarea{
  	width: 100%;
