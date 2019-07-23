@@ -63,7 +63,7 @@ function uploadTrainProduct(){
             if(true == data.success){
             	alert('添加成功');
             	$('#myModal').modal('hide');
-            }else if(401 == result.code){
+            }else if(401 == data.code){
                 alert("当前未登录，请登录");
                 window.location.href = "login.html";
             }else{
