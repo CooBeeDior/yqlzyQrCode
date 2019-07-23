@@ -57,7 +57,7 @@ var TableInit = function () {
             responseHandler: function (res) {
             	if(401 == res.code){
 	                alert("当前未登录，请登录");
-	                window.location.href = "login.html";
+	                window.location.href = "index.html";
 	            }
                  var totalCount = res.totalCount; 
                  return {
@@ -156,7 +156,7 @@ function subAddForm() {
         		alert(result.message);
         	}else if(401 == result.code){
                 alert("当前未登录，请登录");
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }else{
         		alert("添加失败，提示："+data.message);
         	}
@@ -184,7 +184,7 @@ function loginOut() {
         		$.cookie('token', null, { expires: 7, path: '/' }); //清空本地token
         		$.cookie('userName', null, { expires: 7, path: '/' }); //清空本地token
         		alert("退出成功");
-        		window.location.href = "login.html";
+        		window.location.href = "index.html";
         	}else{
         		alert("失败，提示："+result.message);
         	}
