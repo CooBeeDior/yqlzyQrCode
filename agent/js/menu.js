@@ -46,8 +46,7 @@ function getStatus(sta) {
 };
 
 /** 图片形式新增二维码 s **/
-function uploadTrainProduct(){   
-    let fileList = [];
+function uploadTrainProduct(e){    
     const fileCatcher = $('#addbyimg');    
 	let formData = new FormData(fileCatcher[0]);  
     $.ajax({
@@ -59,8 +58,11 @@ function uploadTrainProduct(){
         headers: {
             Authorization: $.cookie('token')
         },
-        async : false,
-        success : function(result) { 
+        async : true,
+        beforeSend:function (xhr) {
+                $("#addImgBtn").button('loading');
+        },
+        success:function(result) { 
             if(true == result.success){
             	alert('添加成功');
             	$('#myModal').modal('hide');
@@ -69,8 +71,12 @@ function uploadTrainProduct(){
                 window.location.href = "index.html";
             }else{
             	alert("添加失败，请确认是否为可识别的二维码图片");
-            }
-        }
+            }  
+        },
+        complete: function (XMLHttpRequest, status) {
+            $("#addImgBtn").button('reset');
+        } 
+
     });
 }
 /** 图片形式新增二维码 e **/
